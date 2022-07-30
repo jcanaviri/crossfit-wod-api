@@ -1,0 +1,24 @@
+{
+  "name": "crossfit-wod-api",
+  "version": "1.0.0",
+  "description": "Example of api best practices",
+  "main": "index.js",
+  "author": "Josue Canaviri",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "apicache": "^1.6.3",
+    "express": "^4.18.1",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.5.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19"
+  }
+}
