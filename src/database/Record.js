@@ -25,16 +25,48 @@ const getOneRecord = (recordId) => {
   }
 }
 
-// TODO: Make create, update and delete endpoints.
 const createNewRecord = (newRecord) => {
   try {
+    const isAlreadyAdded =
+      DB.records.findIndex((record) => record.workout === newRecord.workout) >
+      -1
+
+    if (isAlreadyAdded) {
+      throw {
+        status: 400,
+        message: `The workout: '${newRecord.workout}' already has a record`,
+      }
+    }
+
+    DB.records.push(newRecord)
+    saveToDataBase(DB)
+    return newRecord
   } catch (error) {
     throw { status: error?.status || 500, message: error?.message || error }
   }
 }
 
-const updateOneRecord = (recordId) => {
+const updateOneRecord = (recordId, newRecord) => {
   try {
+    const indexForUpdate = DB.records.findIndex(
+      (record) => record.id === recordId
+    )
+
+    if (indexForUpdate === -1) {
+      throw {
+        status: 400,
+        message: `Can't find the record with the id: ${recordId}`
+      }
+    }
+
+    const updatedRecord = {
+      ...DB.records[indexForUpdate],
+      record: newRecord
+    }
+
+    DB.records[indexForUpdate] = updatedRecord
+    saveToDataBase(DB)
+    return updatedRecord
   } catch (error) {
     throw { status: error?.status || 500, message: error?.message || error }
   }
@@ -42,6 +74,19 @@ const updateOneRecord = (recordId) => {
 
 const deleteOneRecord = (recordId) => {
   try {
+    const indexForDelete = DB.records.findIndex(
+      (record) => record.id === recordId
+    )
+
+    if (indexForDelete === -1) {
+      throw {
+        status: 400,
+        message: `Can't find the record with the id: ${recordId}`,
+      }
+    }
+
+    DB.records.splice(indexForDelete, 1)
+    saveToDataBase(DB)
   } catch (error) {
     throw { status: error?.status || 500, message: error?.message || error }
   }
@@ -64,4 +109,11 @@ const getRecordForWorkout = (workoutId) => {
   }
 }
 
-module.exports = { getAllRecords, getOneRecord, getRecordForWorkout }
+module.exports = {
+  getAllRecords,
+  getOneRecord,
+  getRecordForWorkout,
+  createNewRecord,
+  updateOneRecord,
+  deleteOneRecord,
+}
